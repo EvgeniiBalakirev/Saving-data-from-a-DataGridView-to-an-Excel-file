@@ -1,0 +1,28 @@
+using MOIE = Microsoft.Office.Interop.Excel; //Необходимо подключить Microsoft Excel Object Library для использования.
+
+saveFileDialog1.Filter = "xls | *.xls";
+
+if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+{
+    MOIE.Application Application = new MOIE.Application();
+    MOIE.Workbook Workbook = Application.Workbooks.Add();
+    MOIE.Worksheet Worksheet = Workbook.ActiveSheet;
+    
+    Worksheet.StandardWidth = 30; //Стандартная ширина столбцов (опционально). 
+    
+    for (int i = 1; i < dataGridView1.RowCount + 1; i++) 
+    {
+        for (int i2 = 1; i2 < dataGridView1.ColumnCount + 1; i2++) 
+        {
+            Worksheet.Cells[1, 1] = "Имя"; //Заголовки столбцов (опционально).
+            Worksheet.Cells[1, 2] = "Фамилия";
+            Worksheet.Cells[1, 3] = "Отчество";
+            
+            Worksheet.Rows[i+1].Columns[i2] = dataGridView1.Rows[i - 1].Cells[i2 - 1].Value;                      
+        }                       
+    }
+    
+    Workbook.SaveAs(saveFileDialog1.FileName);
+    
+    Application.Quit();                  
+}       
